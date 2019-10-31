@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/react-pivot-table/static/css/main.b100e6da.chunk.css",
+    "main.js": "/react-pivot-table/static/js/main.884824bf.chunk.js",
+    "main.js.map": "/react-pivot-table/static/js/main.884824bf.chunk.js.map",
+    "runtime-main.js": "/react-pivot-table/static/js/runtime-main.df7baf6c.js",
+    "runtime-main.js.map": "/react-pivot-table/static/js/runtime-main.df7baf6c.js.map",
+    "static/js/2.816d4f8a.chunk.js": "/react-pivot-table/static/js/2.816d4f8a.chunk.js",
+    "static/js/2.816d4f8a.chunk.js.map": "/react-pivot-table/static/js/2.816d4f8a.chunk.js.map",
+    "index.html": "/react-pivot-table/index.html",
+    "precache-manifest.04c56ac869d363791fb3b145a5fbaa4f.js": "/react-pivot-table/precache-manifest.04c56ac869d363791fb3b145a5fbaa4f.js",
+    "service-worker.js": "/react-pivot-table/service-worker.js",
+    "static/css/main.b100e6da.chunk.css.map": "/react-pivot-table/static/css/main.b100e6da.chunk.css.map",
+    "static/media/logo.svg": "/react-pivot-table/static/media/logo.25bf045c.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.df7baf6c.js",
+    "static/js/2.816d4f8a.chunk.js",
+    "static/css/main.b100e6da.chunk.css",
+    "static/js/main.884824bf.chunk.js"
+  ]
+}
