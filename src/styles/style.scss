@@ -1,4 +1,4 @@
-table {
+table.pivot-table {
     tr {
         td:not(:first-child) {
             text-align: right;
@@ -17,7 +17,14 @@ table {
         }
     }
 
+    thead {
+        background-color: #3D52B2;
+        color: #fff;
+    }
+
     tfoot {
+        background-color: lightblue;
+
         tr {
             th {
                 text-align: right;

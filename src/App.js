@@ -96,7 +96,7 @@ function App() {
 
 	return (
 		<div className="container">
-			<table className="table table-bordered table-hover table-sm">
+			<table className="table table-bordered table-hover table-sm pivot-table">
 				<thead>
 					<tr>
 						<th className={state}>&nbsp;</th>
@@ -181,7 +181,7 @@ function App() {
 													<td>
 														<span className="pl-5">{security['Security']}</span>
 													</td>
-													<td>{security['MV']}</td>
+													<td>{fieldValue(security['MV'])}</td>
 													<td>{fieldValue(security['Carry'])}</td>
 													<td>{fieldValue(security['Net PL 1'])}</td>
 													<td>{fieldValue(security['Net PL 2'])}</td>
@@ -197,7 +197,7 @@ function App() {
 				</tbody>
 				<tfoot>
 					<tr>
-						<th>&nbsp;</th>
+						<th className="text-left">Grand Total</th>
 						<th>{fieldValue(findtotal(data, 'MV'))}</th>
 						<th>{fieldValue(findtotal(data, 'Carry'))}</th>
 						<th>{fieldValue(findtotal(data, 'Net PL 1'))}</th>
