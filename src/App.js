@@ -2,10 +2,12 @@ import React, { Fragment, useState } from 'react';
 import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.scss';
+import { absolute, roundUp, flatternArray, findtotal } from './helpers';
 import jsonData from './assets/data.json';
 
 const { headers, data } = jsonData.Pivot1;
 
+// console.log({ headers });
 // console.log({ data });
 
 /**
@@ -44,14 +46,6 @@ setSubStrategyArray.forEach(items => {
 	items.push([{ visibleOuter: false }]);
 });
 
-function absolute(value) {
-	return Math.abs(value);
-}
-
-function roundUp(value) {
-	return Math.round(value);
-}
-
 function fieldValue(value) {
 	let val = roundUp(value);
 	if (val < 0) {
@@ -60,22 +54,6 @@ function fieldValue(value) {
 		);
 	}
 	return val.toLocaleString();
-}
-
-function flatternArray(oldArray) {
-	let clonedArray = [...oldArray];
-	clonedArray.pop();
-	return Array.prototype.concat.apply([], clonedArray);
-}
-
-function findtotal(group, key) {
-	return group.reduce((acc, val) => {
-		if (val.hasOwnProperty(key)) {
-			return acc + roundUp(val[key]);
-		} else {
-			return acc;
-		}
-	}, 0);
 }
 
 function App() {
