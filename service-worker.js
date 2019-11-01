@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/react-pivot-table/precache-manifest.fb28e61050b765e221ed5c252e433064.js"
+  "/react-pivot-table/precache-manifest.2400ebef3bf2834c4a2741b134231f5d.js"
 );
 
 self.addEventListener('message', (event) => {
