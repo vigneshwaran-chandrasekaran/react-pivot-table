@@ -1,50 +1,20 @@
 import React, { Fragment, useState } from 'react';
-import _ from 'lodash';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/style.scss';
 import { absolute, roundUp, flatternArray, findtotal } from './helpers';
-import jsonData from './assets/data.json';
+import dataArray, { headers, data } from './helpers/data-modifier';
+import { variables } from './utils';
 
-const { headers, data } = jsonData.Pivot1;
-
-// console.log({ headers });
-// console.log({ data });
-
-/**
- * added extra 'visible' key to all object for hide and show
- */
-const addedVisibleKey = data.map(item => ({ visible: false, ...item }));
-
-/**
- * group 'addedVisibleKey' by 'Strategy' key
- */
-const strategyObj = _.groupBy(addedVisibleKey, item => item['Strategy']);
-
-/**
- * convert grouped Strategy object into Strategy array
- */
-const strategyArray = Object.keys(strategyObj).map(key => strategyObj[key]);
-
-/**
- * group 'strategyArray' by 'Sub Strategy' key
- */
-const subStrategy = strategyArray.map(item =>
-	_.groupBy(item, item => item['Sub Strategy'])
-);
-
-/**
- * convert grouped 'subStrategy' object into array
- */
-let setSubStrategyArray = subStrategy.map(items =>
-	Object.keys(items).map(key => items[key])
-);
-
-/**
- * added extra 'visibleOuter' key for outer row array object
- */
-setSubStrategyArray.forEach(items => {
-	items.push([{ visibleOuter: false }]);
-});
+const {
+	MV,
+	CARRY,
+	NP1,
+	NP2,
+	NP3,
+	SUB_STRATEGY,
+	STRATEGY,
+	SECURITY
+} = variables;
 
 function fieldValue(value) {
 	let val = roundUp(value);
@@ -57,19 +27,35 @@ function fieldValue(value) {
 }
 
 function App() {
-	const [state, setState] = useState(0);
+	const [click, setClicked] = useState(0);
 
-	function handleBtnClick(subStrategy) {
+	function handleInnerBtnClick(subStrategy) {
 		subStrategy.forEach(row => {
 			row.visible = !row.visible;
 		});
-		setState(Math.random());
+		setClicked(click + 1);
 	}
 
 	function handleOuterBtnClick(strategy) {
+		/**
+		 * comment below code if no need to close inner row when outer row closed
+		 */
+		if (!strategy[strategy.length - 1].visibleOuter) {
+			closeInnerOpen(strategy);
+		}
 		strategy[strategy.length - 1].visibleOuter = !strategy[strategy.length - 1]
 			.visibleOuter;
-		setState(Math.random());
+		setClicked(click + 1);
+	}
+
+	/**
+	 * will close inner row when outer row closed
+	 */
+	function closeInnerOpen(strategy) {
+		let data = flatternArray(strategy);
+		data.forEach(row => {
+			row.visible = false;
+		});
 	}
 
 	return (
@@ -77,7 +63,7 @@ function App() {
 			<table className="table table-bordered table-hover table-sm pivot-table">
 				<thead>
 					<tr>
-						<th className={state}>&nbsp;</th>
+						<th className={click}>&nbsp;</th>
 						{headers.map(({ displayName }) => (
 							<th className="text-center" key={displayName}>
 								{displayName}
@@ -86,7 +72,7 @@ function App() {
 					</tr>
 				</thead>
 				<tbody>
-					{setSubStrategyArray.map((strategy, stI) => (
+					{dataArray.map((strategy, stI) => (
 						<Fragment key={`${stI}-strategy`}>
 							<tr>
 								<td>
@@ -96,21 +82,13 @@ function App() {
 									>
 										{strategy[strategy.length - 1].visibleOuter ? '-' : '+'}
 									</button>
-									<span className="pl-2">{strategy[0][0]['Strategy']}</span>
+									<span className="pl-2">{strategy[0][0][STRATEGY]}</span>
 								</td>
-								<td>{fieldValue(findtotal(flatternArray(strategy), 'MV'))}</td>
-								<td>
-									{fieldValue(findtotal(flatternArray(strategy), 'Carry'))}
-								</td>
-								<td>
-									{fieldValue(findtotal(flatternArray(strategy), 'Net PL 1'))}
-								</td>
-								<td>
-									{fieldValue(findtotal(flatternArray(strategy), 'Net PL 2'))}
-								</td>
-								<td>
-									{fieldValue(findtotal(flatternArray(strategy), 'Net PL 3'))}
-								</td>
+								<td>{fieldValue(findtotal(flatternArray(strategy), MV))}</td>
+								<td>{fieldValue(findtotal(flatternArray(strategy), CARRY))}</td>
+								<td>{fieldValue(findtotal(flatternArray(strategy), NP1))}</td>
+								<td>{fieldValue(findtotal(flatternArray(strategy), NP2))}</td>
+								<td>{fieldValue(findtotal(flatternArray(strategy), NP3))}</td>
 							</tr>
 							{strategy.map((subStrategy, subIndex) => (
 								<Fragment key={`${subIndex}-subStrategy`}>
@@ -125,26 +103,20 @@ function App() {
 											>
 												<td className="pl-3">
 													<button
-														onClick={() => handleBtnClick(subStrategy)}
+														onClick={() => handleInnerBtnClick(subStrategy)}
 														className="btn-sqr"
 													>
 														{subStrategy[0]['visible'] ? '-' : '+'}
 													</button>
 													<span className="pl-2">
-														{subStrategy[0]['Sub Strategy']}
+														{subStrategy[0][SUB_STRATEGY]}
 													</span>
 												</td>
-												<td>{fieldValue(findtotal(subStrategy, 'MV'))}</td>
-												<td>{fieldValue(findtotal(subStrategy, 'Carry'))}</td>
-												<td>
-													{fieldValue(findtotal(subStrategy, 'Net PL 1'))}
-												</td>
-												<td>
-													{fieldValue(findtotal(subStrategy, 'Net PL 2'))}
-												</td>
-												<td>
-													{fieldValue(findtotal(subStrategy, 'Net PL 3'))}
-												</td>
+												<td>{fieldValue(findtotal(subStrategy, MV))}</td>
+												<td>{fieldValue(findtotal(subStrategy, CARRY))}</td>
+												<td>{fieldValue(findtotal(subStrategy, NP1))}</td>
+												<td>{fieldValue(findtotal(subStrategy, NP2))}</td>
+												<td>{fieldValue(findtotal(subStrategy, NP3))}</td>
 											</tr>
 											{subStrategy.map((security, secIndex) => (
 												<tr
@@ -157,13 +129,13 @@ function App() {
 													}
 												>
 													<td>
-														<span className="pl-5">{security['Security']}</span>
+														<span className="pl-5">{security[SECURITY]}</span>
 													</td>
-													<td>{fieldValue(security['MV'])}</td>
-													<td>{fieldValue(security['Carry'])}</td>
-													<td>{fieldValue(security['Net PL 1'])}</td>
-													<td>{fieldValue(security['Net PL 2'])}</td>
-													<td>{fieldValue(security['Net PL 3'])}</td>
+													<td>{fieldValue(security[MV])}</td>
+													<td>{fieldValue(security[CARRY])}</td>
+													<td>{fieldValue(security[NP1])}</td>
+													<td>{fieldValue(security[NP2])}</td>
+													<td>{fieldValue(security[NP3])}</td>
 												</tr>
 											))}
 										</>
@@ -176,11 +148,11 @@ function App() {
 				<tfoot>
 					<tr>
 						<th className="text-left">Grand Total</th>
-						<th>{fieldValue(findtotal(data, 'MV'))}</th>
-						<th>{fieldValue(findtotal(data, 'Carry'))}</th>
-						<th>{fieldValue(findtotal(data, 'Net PL 1'))}</th>
-						<th>{fieldValue(findtotal(data, 'Net PL 2'))}</th>
-						<th>{fieldValue(findtotal(data, 'Net PL 3'))}</th>
+						<th>{fieldValue(findtotal(data, MV))}</th>
+						<th>{fieldValue(findtotal(data, CARRY))}</th>
+						<th>{fieldValue(findtotal(data, NP1))}</th>
+						<th>{fieldValue(findtotal(data, NP2))}</th>
+						<th>{fieldValue(findtotal(data, NP3))}</th>
 					</tr>
 				</tfoot>
 			</table>
