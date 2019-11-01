@@ -1,0 +1,27 @@
+table {
+    tr {
+        td:not(:first-child) {
+            text-align: right;
+        }
+
+        td {
+            .btn-sqr {
+                width: 20px;
+                height: 20px;
+                padding: 0;
+                line-height: 20px;
+                background-color: transparent;
+                border: 1px solid #000;
+                text-align: center;
+            }
+        }
+    }
+
+    tfoot {
+        tr {
+            th {
+                text-align: right;
+            }
+        }
+    }
+}
